@@ -6,6 +6,14 @@ ls
 git init
 git status
 git commit -m "first commit"
-git add .
 git remote add origin https://github.com/DimAsInteger/TriviaGame.git
+git push -u origin master
+
+//to update the existing repository:
+
+cd /c/Users/elf/Desktop/TriviaGame
+git init
+git add assets/ index.html github.txt
+git status
+git commit -m "change 6"
 git push -u origin master
