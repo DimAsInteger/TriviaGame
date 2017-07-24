@@ -1,0 +1,11 @@
+//07/24/17:
+//create repository:
+
+cd /c/Users/elf/Desktop/TriviaGame
+ls
+git init
+git status
+git commit -m "first commit"
+git add .
+git remote add origin https://github.com/DimAsInteger/TriviaGame.git
+git push -u origin master
