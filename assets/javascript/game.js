@@ -1,110 +1,165 @@
-//Initialize Numbers:
-//onload loading of function to generate a random number between 1-100:
+$(document).ready(function() {
+	var index = 0;
+	var countdownTimer = {
+		time : 20,
+		reset: function() {
+			this.time = 20;
+			$('.timer').html('<h3>' + this.time + ' seconds remaining</h3>');
+		},
+		initializeCounter: function() {
+			counter = setInterval(countdownTimer.count, 1000);	
+		},
+		stopCounter: function() {
+			clearInterval(counter);
+		},
+		count: function() {
+				countdownTimer.time--;
+				console.log(countdownTimer.time);
+//				$('.timer').html(countdownTimer.time);
+			if (countdownTimer.time >= 0) {
+				$('.timer').html('<h3>' + countdownTimer.time + ' seconds remaining</h3>');
+			}
+			else {
+				index++;
+				answerWrong();
+				countdownTimer.reset();
+				if (index < questionArray.length) {
+					loadQuestion(index);
+				} else {
+					$(".answerchoice").hide();
+					showScore();
+				}
+			}
+		}
+	};
 
-var randomnumber = ""; 
-window.onload = function(){
-    randnumber = Math.floor(Math.random()*100)+1;
-      document.getElementById("num").innerHTML = randnumber;
+var correct = 0;
+var wrong = 0;
+var q1 = {
+	question : 'Who was the host for Kitchen Kabaret?',
+	possibleAnswers : [	'A. Fud Wrapper',
+				 		'B. Cookie Ann Milk',
+				 		'C. Bonnie Appetit',
+				 		'D. Cherry Ontop'],
+	flags : [false, false, true, false],
+	answer : 'C. Bonnie Appetit'
 };
 
-//push 4 random numbers between 1-10 into 'startNumsPusher' array:
-var starterNumsPusher = [];
-function crystalNumsInt() {
-	for(i=0;i<4;i++) {
-  		var starterNums = Math.floor(Math.random()*10+1);
-  		starterNumsPusher.push(starterNums);
-  	}
-  	//console.log(starterNumsPusher);
-}
-crystalNumsInt();
+var q2 = {
+	question: 'Who starred in the title role of Condorman?',
+	possibleAnswers: ['A. Zac Efron',
+				 'B. Michael Crawford',
+				 'C. Billy Crystal',
+				 'D. Michael Keaton'],
+	flags : [false, true, false, false],
+	answer : 'B. Michael Crawford'
+};
 
-//restart the game:
-var rand = "";
-var score = 0;
-$( document ).ready(function(){
-function restart() {
-  rand=Math.floor(Math.random()*100+1);
-    $('#num').text(rand);
-      starterNumsPusher = [];
-        crystalNumsInt();
-      score = 0;
-    $('#userNum').text(score);
-    //console.log("random number " + rand);
-}
-/*___________________________________________________________________________________________________________________
-*/
-//adds the number wins to "Wins: ":
-var win = 0;
-function winningDuh(){
-    document.getElementById("outputStanding").innerHTML = "WINNING DUHHHHHHHHHHHHHHH!";
-      win++; 
-        document.getElementById("winner").innerHTML = win;
-        //console.log("show me wins: " + win);
-  restart();
 
+var questionArray = [q1, q2];
+
+function loadQuestion(questionSelection) {
+	console.log(questionSelection);
+	countdownTimer.reset();
+  $(".question").html("<h3>" + questionArray[questionSelection].question + "</h3>");
+  $("#buttonA").text(questionArray[questionSelection].possibleAnswers[0]).show();
+  $("#buttonB").text(questionArray[questionSelection].possibleAnswers[1]).show();
+  $("#buttonC").text(questionArray[questionSelection].possibleAnswers[2]).show();
+  $("#buttonD").text(questionArray[questionSelection].possibleAnswers[3]).show();
 }
 
-//adds the number of losses to "Losses: "
-var loss = 0;
-function youreALooserBaby(){
-    document.getElementById("outputStanding").innerHTML = "You're a looser, baby.";
-      loss++;
-        document.getElementById("loser").innerHTML = loss;
-        //console.log("show me loss: " + loss);
-  restart();
+function setup() {
+	index = 0;
+	$('.question').append();
+	$('#starter').on('click', function() {
+		$(this).hide();
+		countdownTimer.initializeCounter();
+	 	loadQuestion(index);
+	});
+}		
+
+function getAnswer() {
+
+//  nextQuestion();
+	$('.answerchoice').on('click', function() {
+	  console.log('alert', index);
+		index++;
+		console.log('click', index);
+		$(".question").text('');
+		$("#buttonA").text('');
+		$("#buttonB").text('');
+		$("#buttonC").text('');
+		$("#buttonD").text('');
+		loadQuestion();
+	})
 }
 
-/*___________________________________________________________________________________________________________________________________
-*/
-//if/else if statements are conditional statements for winning or loosing for each crystal
-var arr = [];
-  $("#red").on ("click", function(){
-    score = score + starterNumsPusher[0];
-               /*----EVALUATE----*/
-    //console.log("New total= " + score);
-    //arr.push(score);
-    //console.log("array of scored numbers = " + arr);
-    //console.log("the final element in the array is = " + arr.slice(0).pop());
-    $("#userNum").text(score);
-      if (score == rand){winningDuh();}
-        else if (score > rand){youreALooserBaby();}  
-        })
+function answerCorrect() {
+	correct++;
+	alert("Correct!");
+	console.log("correct");
+}
 
-$("#blue").on ("click", function(){
-  score = score + starterNumsPusher[1];
-               /*----EVALUATE----*/
-    //console.log("New total= " + score);
-    //arr.push(score);
-    //console.log("array of scored numbers = " + arr);
-    //console.log("the final element in the array is = " + arr.slice(0).pop());
-    $("#userNum").text(score);
-      if (score == rand){winningDuh();}
-        else if (score > rand){youreALooserBaby();}  
-        })
+function answerWrong() {
+	wrong++;
+	alert("Incorrect!");
+	console.log("wrong");
+}
 
-$("#yellow").on ("click", function(){
-  score = score + starterNumsPusher[2];
-               /*----EVALUATE----*/
-    //console.log("New total= " + score);
-    //arr.push(score);
-    //console.log("array of scored numbers = " + arr);
-    //console.log("the final element in the array is = " + arr.slice(0).pop());
-    $("#userNum").text(score);
-      if (score == rand){winningDuh();}
-        else if (score > rand){youreALooserBaby();}  
-        })
+function showScore() {
+	$('.question').empty();
+	$('.question').append("<h2><p>" + correct + " correct</p></h2>");
+	$('.question').append("<h2><p>" + wrong + " incorrect</p></h2>");
+	countdownTimer.stopCounter();
+	$('.timer').empty();
 
+}
 
-$("#green").on ("click", function(){
-  score = score + starterNumsPusher[3];
-               /*----EVALUATE----*/
-    //console.log("New total= " + score);
-    //arr.push(score);
-    //console.log("array of scored numbers = " + arr);
-    //console.log("the final element in the array is = " + arr.slice(0).pop());
-    $("#userNum").text(score);
-      if (score == rand){winningDuh();}
-        else if (score > rand){youreALooserBaby();}  
-        })
+setup();
+$('.answerchoice').on('click', function() {
+ console.log($(this));
+ if(this.id == 'buttonA') {
+ 	var answerChosen = 'A';
+ } else if(this.id == 'buttonB') {
+ 	answerChosen = 'B';
+ } else if (this.id == 'buttonC') {
+ 	answerChosen = 'C';
+ } else if (this.id == 'buttonD') {
+ 	answerChosen = 'D';
+ } 
+ if ((answerChosen == 'A') && (questionArray[index].flags[0] == true)) {
+ 	answerCorrect();
+ } else if (answerChosen == 'A') {
+ 	answerWrong();
+ }
+ if ((answerChosen == 'B') && (questionArray[index].flags[1] == true)) {
+ 	answerCorrect();
+ } else if (answerChosen == 'B') {
+ 	answerWrong();
+ }
+if ((answerChosen == 'C') && (questionArray[index].flags[2] == true)) {
+ 	answerCorrect();
+ } else if (answerChosen == 'C') {
+ 	answerWrong();
+ }
+if ((answerChosen == 'D') && (questionArray[index].flags[3] == true)) {
+ 	answerCorrect();
+ } else if (answerChosen == 'D') {
+ 	answerWrong();
+ }
+
+ $(".question").text('');
+ $("#buttonA").text('');
+ $("#buttonB").text('');
+ $("#buttonC").text('');
+ $("#buttonD").text('');
+ index++;
+ if (index < questionArray.length) {
+ 	loadQuestion(index);
+ } else {
+ 	$(".answerchoice").hide();
+ 	showScore();
+ }
+});
 
 });
