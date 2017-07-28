@@ -1,163 +1,191 @@
 $(document).ready(function() {
 	var index = 0;
-	var countdownTimer = {
+	var timeClock = {
 		time : 20,
-		reset: function() {
+
+		resettimeClock: function() {
 			this.time = 20;
-			$('.timer').html('<h3>' + this.time + ' seconds remaining</h3>');
+			$(".timer").html("<h3>" +  "time remaining:  " + this.time + " seconds" + "</h3>");
 		},
-		initializeCounter: function() {
-			counter = setInterval(countdownTimer.count, 1000);	
-		},
-		stopCounter: function() {
-			clearInterval(counter);
-		},
-		count: function() {
-				countdownTimer.time--;
-				console.log(countdownTimer.time);
-//				$('.timer').html(countdownTimer.time);
-			if (countdownTimer.time >= 0) {
-				$('.timer').html('<h3>' + countdownTimer.time + ' seconds remaining</h3>');
-			}
-			else {
-				index++;
-				answerWrong();
-				countdownTimer.reset();
-				if (index < questionArray.length) {
-					loadQuestion(index);
-				} else {
-					$(".answerchoice").hide();
-					showScore();
-				}
-			}
-		}
+			initializeCounter: function() {
+				var second = 1000;
+				counter = setInterval(timeClock.count, second);	
+			},
+				stopCounter: function() {
+					clearInterval(counter);
+				},
+					count: function() {
+						timeClock.time--;
+
+							if (timeClock.time >= 0) {
+								$(".timer").html("<h3>" +  "time remaining:  " + timeClock.time + " seconds" + "</h3>");
+							}
+							else {
+								index++;
+								answerWrong();
+								timeClock.resettimeClock();
+
+								if (index < qArray.length) {
+									loadQuest(index);
+								} 
+								else {
+									$(".selection").hide();
+									showScore();
+								}
+							}
+					}
 	};
 
-var correct = 0;
-var wrong = 0;
+var yah = 0;
+var nah = 0;
+
 var q1 = {
-	question : 'Who was the host for Kitchen Kabaret?',
-	possibleAnswers : [	'A. Fud Wrapper',
-				 		'B. Cookie Ann Milk',
-				 		'C. Bonnie Appetit',
-				 		'D. Cherry Ontop'],
-	flags : [false, false, true, false],
-	answer : 'C. Bonnie Appetit'
+	quest : "The human genome is:",
+		choices : [	"A. All of our genes",
+				 		"B. All of the DNA and RNA in our cells",
+				 		"C. All of our DNA",
+				 		"D. Responsible for all our physical characteristics"],
+		states : [false, false, true, false],
+	answer : "C. All of our DNA"
 };
 
 var q2 = {
-	question: 'Who starred in the title role of Condorman?',
-	possibleAnswers: ['A. Zac Efron',
-				 'B. Michael Crawford',
-				 'C. Billy Crystal',
-				 'D. Michael Keaton'],
-	flags : [false, true, false, false],
-	answer : 'B. Michael Crawford'
+	quest : "Scientists now think humans have how many protein-encoding genes:",
+		choices : [	"A. More than  1 million",
+				 		"B. 275,000 - 375,000",
+				 		"C. 65 - 75,000",
+				 		"D. 20 - 25,000"],
+		states : [false, false, false, true],
+	answer : "A. More than  1 million"
 };
 
+var q3 = {
+	quest : "How many chromosomes do humans have?",
+		choices : [	"A. 46",
+				 		"B. 102",
+				 		"C. 88",
+				 		"D. 15822"],
+		states : [true, false, false, false],
+	answer : "A. 46"
+};
 
-var questionArray = [q1, q2];
+var qArray = [q1, q2, q3];
 
-function loadQuestion(questionSelection) {
-	console.log(questionSelection);
-	countdownTimer.reset();
-  $(".question").html("<h3>" + questionArray[questionSelection].question + "</h3>");
-  $("#buttonA").text(questionArray[questionSelection].possibleAnswers[0]).show();
-  $("#buttonB").text(questionArray[questionSelection].possibleAnswers[1]).show();
-  $("#buttonC").text(questionArray[questionSelection].possibleAnswers[2]).show();
-  $("#buttonD").text(questionArray[questionSelection].possibleAnswers[3]).show();
+function loadQuest(questSelection) {
+	timeClock.resettimeClock();
+  		$(".quest").html("<h3>" + qArray[questSelection].quest + "</h3>");
+  		$("#bA").text(qArray[questSelection].choices[0]).show();
+  		$("#bB").text(qArray[questSelection].choices[1]).show();
+  		$("#bC").text(qArray[questSelection].choices[2]).show();
+  		$("#bD").text(qArray[questSelection].choices[3]).show();
 }
 
 function setup() {
 	index = 0;
-	$('.question').append();
+	$('.quest').append();
 	$('#starter').on('click', function() {
 		$(this).hide();
-		countdownTimer.initializeCounter();
-	 	loadQuestion(index);
+		timeClock.initializeCounter();
+	 	loadQuest(index);
 	});
 }		
 
 function getAnswer() {
 
-//  nextQuestion();
-	$('.answerchoice').on('click', function() {
+	$('.selection').on('click', function() {
 	  console.log('alert', index);
 		index++;
 		console.log('click', index);
-		$(".question").text('');
-		$("#buttonA").text('');
-		$("#buttonB").text('');
-		$("#buttonC").text('');
-		$("#buttonD").text('');
-		loadQuestion();
+		$(".quest").text('');
+		$("#bA").text('');
+		$("#bB").text('');
+		$("#bC").text('');
+		$("#bD").text('');
+		loadQuest();
 	})
 }
 
-function answerCorrect() {
-	correct++;
-	alert("Correct!");
-	console.log("correct");
+//message correct:
+function swish() {
+	yah++;
+	alert("That's the one! You got it! Another one in the basket!");
 }
 
-function answerWrong() {
-	wrong++;
-	alert("Incorrect!");
-	console.log("wrong");
+//message incorrect:
+function bish() {
+	nah++;
+	alert("That's INCORRECT! You bloated sack of methylation!");
 }
 
 function showScore() {
-	$('.question').empty();
-	$('.question').append("<h2><p>" + correct + " correct</p></h2>");
-	$('.question').append("<h2><p>" + wrong + " incorrect</p></h2>");
-	countdownTimer.stopCounter();
+	$('.quest').empty();
+	$('.quest').append("<h4><p>FINAL SCORE:</p></h4>");
+	$('.quest').append("<h4><p>SWISH: " + yah + "    ||    BISH: " + nah + "</p></h4>");
+	timeClock.stopCounter();
 	$('.timer').empty();
-
 }
 
 setup();
-$('.answerchoice').on('click', function() {
- console.log($(this));
- if(this.id == 'buttonA') {
- 	var answerChosen = 'A';
- } else if(this.id == 'buttonB') {
- 	answerChosen = 'B';
- } else if (this.id == 'buttonC') {
- 	answerChosen = 'C';
- } else if (this.id == 'buttonD') {
- 	answerChosen = 'D';
+$(".selection").on("click", function() {
+ /*console.log($(this));*/
+ if(this.id == "bA") {
+ 	var pick = "A";
+ } else if(this.id == "bB") {
+ 	pick = "B";
+ } else if (this.id == "bC") {
+ 	pick = "C";
+ } else if (this.id == "bD") {
+ 	pick = "D";
  } 
- if ((answerChosen == 'A') && (questionArray[index].flags[0] == true)) {
- 	answerCorrect();
- } else if (answerChosen == 'A') {
- 	answerWrong();
- }
- if ((answerChosen == 'B') && (questionArray[index].flags[1] == true)) {
- 	answerCorrect();
- } else if (answerChosen == 'B') {
- 	answerWrong();
- }
-if ((answerChosen == 'C') && (questionArray[index].flags[2] == true)) {
- 	answerCorrect();
- } else if (answerChosen == 'C') {
- 	answerWrong();
- }
-if ((answerChosen == 'D') && (questionArray[index].flags[3] == true)) {
- 	answerCorrect();
- } else if (answerChosen == 'D') {
- 	answerWrong();
- }
+ 
+ if ((pick == 'A') && (qArray[index].states[0] == true)) {
+ 		swish();
+ } 
+ 	else if (pick == 'A') {
+ 		bish();
+ 	}
 
- $(".question").text('');
- $("#buttonA").text('');
- $("#buttonB").text('');
- $("#buttonC").text('');
- $("#buttonD").text('');
+ if ((pick == 'B') && (qArray[index].states[1] == true)) {
+ 		swish();
+ } 
+ 	else if (pick == 'B') {
+ 		bish();
+ 	}
+if ((pick == 'C') && (qArray[index].states[2] == true)) {
+ 		swish();
+ } 
+ 	else if (pick == 'C') {
+ 		bish();
+ 	}
+
+if ((pick == 'D') && (qArray[index].states[3] == true)) {
+ 		swish();
+ }
+  	else if (pick == 'D') {
+ 		bish();
+ 	}
+
+/*
+for (i=0;i<qArray.length;i++) {
+	if ((pick == "A" || "B" || "C" || "D") && (qArray[index].states[i] == true)) {
+		swish();
+	}	
+	else if (pick == "A" || "B" || "C" || "D") {
+		bish();
+	}
+}
+*/
+
+ $(".quest").text('');
+ $("#bA").text('');
+ $("#bB").text('');
+ $("#bC").text('');
+ $("#bD").text('');
  index++;
- if (index < questionArray.length) {
- 	loadQuestion(index);
+ if (index < qArray.length) {
+ 	loadQuest(index);
  } else {
- 	$(".answerchoice").hide();
+ 	$(".selection").hide();
  	showScore();
  }
 });

@@ -15,5 +15,5 @@ cd /c/Users/elf/Desktop/TriviaGame
 git init
 git add assets/ index.html github.txt
 git status
-git commit -m "change 6"
+git commit -m "commit two"
 git push -u origin master
